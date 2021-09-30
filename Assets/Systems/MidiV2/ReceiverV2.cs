@@ -7,7 +7,8 @@ using Melanchall.DryWetMidi.Interaction;
 
 public class ReceiverV2 : MonoBehaviour
 {
-    public float StrikerHold = 0.1f;
+    public float StrikerHold = 0.1f;    //how long the striker is "held", allowing it to clear notes
+    //game objects for note strikers. Toms are colour coded (legacy), cymbals are named.
     public GameObject RedStriker;
     public GameObject HHStriker;
     public GameObject LCrashStriker;
@@ -20,6 +21,8 @@ public class ReceiverV2 : MonoBehaviour
     public GameObject ChinaStriker;
     public GameObject KickStriker;
     public GameObject HHPStriker;
+
+    //particle systems that play when notes are cleared
     public ParticleSystem RedParticle;
     public ParticleSystem YellowParticle;
     public ParticleSystem BlueParticle;
@@ -27,25 +30,19 @@ public class ReceiverV2 : MonoBehaviour
     public ParticleSystem KickParticle;
     public ParticleSystem HHPParticle;
     public ParticleSystem GreyParticle;
-    [HideInInspector]
-    public GameObject striker = null;
-    Queue<GameObject>strikers = new Queue<GameObject>();
-    Dictionary<GameObject, float> strikerDelays = new Dictionary<GameObject, float>(); //dict containing strikers to test for bounds/actively playing note and their cooldown
-    
-    MidiEvent currentEvent = null;
-    
-    static string noteNumber = null;
-    Queue<string> noteNumbers = new Queue<string>();
 
-    InputDevice inputDevice;
+    Queue<GameObject>strikers = new Queue<GameObject>(); //queue for resetting striker positions
+    Dictionary<GameObject, float> strikerDelays = new Dictionary<GameObject, float>(); //dict containing strikers to test for bounds/actively playing note and their cooldown
+    Queue<string> noteNumbers = new Queue<string>(); //queue containing played midi notes to be converted to strikerss
+
+    InputDevice inputDevice = null;
     void Start()
     {
         if(InputDevice.GetDevicesCount() > 0)
-        {
+        {   //get the connected midi device and begin listening for played notes
             inputDevice = InputDevice.GetById(InputDevice.GetDevicesCount()-1);
             Debug.Log("Device Connected: " + inputDevice.Name);
             inputDevice.EventReceived += OnEventReceived;
-            
             inputDevice.StartEventsListening();      
         }
         else
@@ -76,7 +73,6 @@ public class ReceiverV2 : MonoBehaviour
         strikerDelays[ChinaStriker] = 0;
         strikerDelays[KickStriker] = 0;
         strikerDelays[HHPStriker] = 0;
-        
     }
 
     
@@ -91,38 +87,35 @@ public class ReceiverV2 : MonoBehaviour
                 strikerDelays[g] = 0;
             }
         }
-        
+        //play queued midi notes from device
         while(noteNumbers.Count > 0)
         {
             //Debug.Log("stack: " + noteNumbers.Peek());
             playNote(noteNumbers.Dequeue());
         }
-
+        
         getKeyboardInput();
     }
 
-    private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
-    {
+    private void OnEventReceived(object sender, MidiEventReceivedEventArgs e){   //detect notes played on midi device and convert 
         var midiDevice = (MidiDevice)sender;
         if(e.Event.EventType == MidiEventType.NoteOn)
         {
             NoteOnEvent n = (NoteOnEvent)e.Event;
-            noteNumber = n.GetNoteId().NoteNumber.ToString();
             noteNumbers.Enqueue(n.GetNoteId().NoteNumber.ToString());
         }      
     }
 
-    private void OnDestroy()
-    {
-        inputDevice.StopEventsListening();
-        Debug.Log("Stopped Listening");
-        inputDevice.Dispose();
+    private void OnDestroy(){    //stop listening to active midi device
+        if(inputDevice != null){
+            inputDevice.StopEventsListening();
+            Debug.Log("Stopped Listening to " + inputDevice.Name);
+            inputDevice.Dispose();
+        }
     }
 
-    void playNote(string noteNumber)
-    {
-        switch (noteNumber)
-        {
+    void playNote(string noteNumber){
+        switch (noteNumber){
             case "34": //hihat pedal 2
             {
                 playHHPNote();
@@ -217,13 +210,11 @@ public class ReceiverV2 : MonoBehaviour
             }
             default:
             {
-                striker = null;
-                Debug.Log("Unknown Note");
+                Debug.Log("Played unknown midi note: " + noteNumber);
                 break;
             }
         }
-        Debug.Log("played: " + noteNumber);     
-          
+        Debug.Log("played: " + noteNumber);      
     }
 
     void playRedNote()
@@ -313,7 +304,7 @@ public class ReceiverV2 : MonoBehaviour
         strikerDelays[HHPStriker] = StrikerHold;
     }
 
-    void getKeyboardInput()
+    void getKeyboardInput() //used for testing when midi device is unavailable (legacy)
     {
         if(Input.GetKeyDown("j"))
         {

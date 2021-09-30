@@ -16,7 +16,7 @@ public class Metronome : MonoBehaviour
         interval = 60 / BPM;
     }
 
-    private void Update()
+    private void Update()   //make accurate by factoring in delta time and AudioSource.PlayScheduled
     {
         currentTime += Time.deltaTime;
         if(currentTime > interval)

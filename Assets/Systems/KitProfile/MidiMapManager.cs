@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +19,13 @@ public class MidiMapManager : MonoBehaviour //class for saving and and loading m
         SaveButton.onClick.AddListener(saveMap);
         NewButton.onClick.AddListener(clearUI);
         LoadButton.onClick.AddListener(loadMap);
+        CloseButton.onClick.AddListener(quit);
+
+        //testing
+        MapName.text = "TD11";
+        loadMap();
+        quit();
+        //end testing
     }
 
     void Update(){
@@ -32,7 +38,7 @@ public class MidiMapManager : MonoBehaviour //class for saving and and loading m
         newInputField.text = text;
     }
 
-    void updateUI(){//cycle through each input field and check the alt notes match the number of inputs displayed
+    void updateUI(){//cycle through each input field and check the amount of alternate notes match the number of inputs displayed
         foreach(Dropdown d in GetComponentsInChildren<Dropdown>()){
             if(d.transform.parent.childCount-2 > int.Parse(d.options[d.value].text)){
                 for(int i = 2; i < d.transform.parent.childCount; i++){//-2 to ignore drop down and default field
@@ -46,11 +52,11 @@ public class MidiMapManager : MonoBehaviour //class for saving and and loading m
             }
         }
     }
-    void saveMap(){
-        //ensure all fields have input
-        if(GetComponentsInChildren<InputField>().ToList().Where(i=>i.text == "").Count() == 0){
+
+    void saveMap(){ //save kit map to text file
+        if(GetComponentsInChildren<InputField>().ToList().Where(i=>i.text == "").Count() == 0){//ensure all fields have input
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(MapDirectory + MapName.text + ".txt")){ //create  new text file at given directory
-                foreach(InputField j in transform.GetComponentsInChildren<InputField>().ToList()){                  //write every
+                foreach(InputField j in transform.GetComponentsInChildren<InputField>().ToList()){                  //write inputs to lines
                     file.WriteLine(j.transform.parent.name.Substring(0,j.transform.parent.name.Length-5).ToUpper() + ":" + j.text);
                 }
                 if(Verbose){Debug.Log("Saved! (" + MapDirectory + MapName.text + ".txt)");}
@@ -73,7 +79,7 @@ public class MidiMapManager : MonoBehaviour //class for saving and and loading m
         }
     }
 
-    void loadInputField(InputField inputField, string drum, string value){
+    void loadInputField(InputField inputField, string drum, string value){//set input field value, create new input field if required
         if(inputField.text != ""){
             createNewInputField(inputField.transform.parent, inputField.transform.parent.childCount-1, value);
             inputField.transform.parent.GetComponentInChildren<Dropdown>().value++;
@@ -85,13 +91,12 @@ public class MidiMapManager : MonoBehaviour //class for saving and and loading m
         }
     }
 
-
-    void loadMap(){
+    void loadMap(){//load map from text file
         string filename = MapDirectory + MapName.text + ".txt";
         string mapName = MapName.text;
         clearUI();
         string[] lines = System.IO.File.ReadAllLines(filename);
-        for(int l = 1; l < lines.Length; l++)
+        for(int l = 1; l < lines.Length; l++)//parse lines to initialise fields
         {
             KitMap[int.Parse(lines[l].Split(':')[1])] = lines[l].Split(':')[0];
             switch(lines[l].Split(':')[0].ToUpper()){
@@ -131,10 +136,12 @@ public class MidiMapManager : MonoBehaviour //class for saving and and loading m
                 case "CHINA":
                     loadInputField(China, "China", lines[l].Split(':')[1]);
                 break;
-
+                default:
+                    Debug.Log("Midi-map note unkown: " + lines[l].Split(':')[0].ToUpper());
+                break;
             }
         }
-        MapName.text = mapName;
+        MapName.text = mapName; //reset the MapName text field to contain the name after clearing UI
         if(Verbose){
             foreach(KeyValuePair<int, string> p in KitMap){
                 Debug.Log(p.Key + " : " + p.Value);
@@ -143,6 +150,8 @@ public class MidiMapManager : MonoBehaviour //class for saving and and loading m
 
     }
 
-
+    void quit(){
+        gameObject.SetActive(false);
+    }
         
 }

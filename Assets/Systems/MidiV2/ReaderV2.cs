@@ -15,30 +15,10 @@ public class ReaderV2 : MonoBehaviour
     public float Scale = 1.0f;
     public int Nominator = 8;
     public float AfterHit = 0.0f;
-
-    public scoreTracker _ScoreTracker;
     
-    public GameObject DefaultNote;
-    public GameObject Kick;
-    public GameObject Snare;
-    public GameObject Tom1;
-    public GameObject Tom2;
-    public GameObject Tom3;
-    public GameObject HihatOpen;
-    public GameObject HihatClosed;
-    public GameObject HihatPedal;
-    public GameObject Crash1;
-    public GameObject Crash2;
-    public GameObject Ride;
-    public GameObject RideBell;
-    public GameObject China;
+    public GameObject DefaultNote, Kick, Snare, Tom1, Tom2, Tom3, HihatOpen, HihatClosed, HihatPedal, Crash1, Crash2, Ride, RideBell, China;
     public GameObject BarLine;
-    public GameObject Stave;
     public GameObject Striker;
-
-    //const float WHOLENOTE = 1920.0f; song 3
-    const float WHOLEBAR = 2400.0f; //profound
-    
     
     MidiFile midiFile;
     TimeSignature timeSig;
@@ -104,7 +84,7 @@ public class ReaderV2 : MonoBehaviour
                 //scale notes
                 foreach(moveNote n in chartNotes)
                 {
-                    n.transform.position = new Vector3(n.transform.position.x, (n.getTime() / 100.0f) * 3, n.transform.position.z);
+                    n.transform.position = new Vector3(n.transform.position.x, (n.Time / 100.0f) * 3, n.transform.position.z);
                 }
 
                 
@@ -182,102 +162,119 @@ public class ReaderV2 : MonoBehaviour
             {
                 n = Instantiate(HihatPedal, new Vector3(-11.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 10;
+                n.GetComponent<moveNote>().Note = "HHP";
                 break;
             }
             case "35": //kick
             {
                 n = Instantiate(Kick, new Vector3(-1.0f, pos, 0f), Quaternion.identity);
-                n.GetComponent<moveNote>().Lane = 0;                                                                    
+                n.GetComponent<moveNote>().Lane = 0;
+                n.GetComponent<moveNote>().Note = "KICK";                                                                    
                 break;
             }
             case "36": //kick 2
             {
                 n = Instantiate(Kick, new Vector3(-1.0f, pos, 0f), Quaternion.identity);
-                n.GetComponent<moveNote>().Lane = 0;                                                                   
+                n.GetComponent<moveNote>().Lane = 0;
+                n.GetComponent<moveNote>().Note = "KICK";                                                                   
                 break;
             }
             case "38": //snare
             {
                 n = Instantiate(Snare, new Vector3(-9.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 1;
+                n.GetComponent<moveNote>().Note = "SNARE";
                 break;
             }
             case "39": //snare
             {
                 n = Instantiate(Snare, new Vector3(-9.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 1;
+                n.GetComponent<moveNote>().Note = "SNARE";
                 break;
             }
             case "40": //snare
             {
                 n = Instantiate(Snare, new Vector3(-9.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 1;
+                n.GetComponent<moveNote>().Note = "SNARE";
                 break;
             }
             case "41": //tom 3
             {
                 n = Instantiate(Tom3, new Vector3(5.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 7;
+                n.GetComponent<moveNote>().Note = "TOM3";
                 break;
             }
             case "42": //hihat closed
             {
                 n = Instantiate(HihatClosed, new Vector3(-7.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 2;
+                n.GetComponent<moveNote>().Note = "HIHAT";
                 break;
             }
             case "43": //tom 3
             {
                 n = Instantiate(Tom3, new Vector3(5.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 7;
+                n.GetComponent<moveNote>().Note = "TOM3";
                 break;
             }
             case "44": //hihat pedal
             {
                 n = Instantiate(HihatOpen, new Vector3(-11.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 10;
+                n.GetComponent<moveNote>().Note = "HHP";
                 break;
             }
             case "45": //tom 2
             {
                 n = Instantiate(Tom2, new Vector3(-1.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 5;
+                n.GetComponent<moveNote>().Note = "TOM2";
                 break;
             }
             case "46": //hihat open
             {
                 n = Instantiate(HihatOpen, new Vector3(-7.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 2;
+                n.GetComponent<moveNote>().Note = "HIHAT";
                 break;
             }
             case "48": //tom 1
             {
                 n = Instantiate(Tom1, new Vector3(-3.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 4;
+                n.GetComponent<moveNote>().Note = "TOM1";
                 break;
             }
             case "49": //left crash
             {
                 n = Instantiate(Crash1, new Vector3(-5.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 3;
+                n.GetComponent<moveNote>().Note = "LCRASH";
                 break;
             }
             case "50": //tom 3
             {
                 n = Instantiate(Tom3, new Vector3(5.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 8;
+                n.GetComponent<moveNote>().Note = "TOM3";
                 break;
             }
             case "51": //ride
             {
                 n = Instantiate(Ride, new Vector3(3.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 7;
+                n.GetComponent<moveNote>().Note = "RIDE";
                 break;
             }
             case "53": //ride bell
             {
                 n = Instantiate(RideBell, new Vector3(3.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 7;
+                n.GetComponent<moveNote>().Note = "RBELL";
                 break;
             }
            
@@ -285,18 +282,21 @@ public class ReaderV2 : MonoBehaviour
             {
                 n = Instantiate(China, new Vector3(7.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 9;
+                n.GetComponent<moveNote>().Note = "CHINA";
                 break;
             }
             case "59": //ride 2
             {
                 n = Instantiate(Ride, new Vector3(3.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 7;
+                n.GetComponent<moveNote>().Note = "RIDE";
                 break;
             }
-            case "83": //right crash 2
+            case "83": //right crash
             {
                 n = Instantiate(Crash2, new Vector3(1.0f, pos, 0f), Quaternion.identity);
                 n.GetComponent<moveNote>().Lane = 6;
+                n.GetComponent<moveNote>().Note = "RCRASH";
                 break;
             }
             default:
@@ -306,10 +306,10 @@ public class ReaderV2 : MonoBehaviour
             }
         }
         n.transform.SetParent(gameObject.transform);
-        n.GetComponent<moveNote>().midiNote = noteNumber.ToString();
+        n.GetComponent<moveNote>().Receiver = GameObject.FindObjectOfType<ReceiverV2>();
+        n.GetComponent<moveNote>().MidiNote = noteNumber.ToString();
         n.GetComponent<moveNote>().Limit = Striker.transform.position.y - AfterHit;
-        n.GetComponent<moveNote>().setTime(pos);
-        n.GetComponent<moveNote>().ScoreTracker = _ScoreTracker;
+        n.GetComponent<moveNote>().Time = pos;
         return n.GetComponent<moveNote>();
     }
 }

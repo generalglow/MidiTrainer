@@ -121,11 +121,11 @@ public class SongBrowser : MonoBehaviour
 
     void playSong(string songTitle){
         var track = SongLibrary.Where(s=>s.Title == songTitle).First();
-        Debug.Log("Loading " + track.Title);
+        if(Verbose){Debug.Log("Loading " + track.Title);}
         StartCoroutine(GetAudioClip(track.FilePath + '/' + track.Title + ".mp3"));
         midiReader.FilePath = track.FilePath + '/' + track.Title + ".mid";
         midiReader.mp3Offset = track.MP3Offset != null ? float.Parse(track.MP3Offset) : 0;
-        Debug.Log("Browser mp3 offset: "+ midiReader.mp3Offset);
+        if(Verbose){Debug.Log("Browser mp3 offset: "+ midiReader.mp3Offset);}
         midiReader.noteOffset = track.NoteOffset != null ? float.Parse(track.NoteOffset) : 0;
         midiReader.LoadChart();
     }
@@ -134,7 +134,7 @@ public class SongBrowser : MonoBehaviour
     IEnumerator GetAudioClip(string mp3filepath)
     {
         //string url = string.Format("file://{0}", mp3filepath); 
-        Debug.Log("Attempting to open MP3 from: \n" + mp3filepath + "\n");
+        if(Verbose){Debug.Log("Attempting to open MP3 from: \n" + mp3filepath + "\n");}
         using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(mp3filepath, AudioType.MPEG))
         {
             yield return www.SendWebRequest();
@@ -146,7 +146,7 @@ public class SongBrowser : MonoBehaviour
             else
             {
                 audioPlayer.clip = DownloadHandlerAudioClip.GetContent(www);
-                Debug.Log("Audio Clip Loaded");
+                if(Verbose){Debug.Log("Audio Clip Loaded");}
                 Highway.SetActive(true);
                 StrikerLine.SetActive(true);
                 SongHUD.SetActive(true);

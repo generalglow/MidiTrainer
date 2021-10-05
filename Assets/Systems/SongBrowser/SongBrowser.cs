@@ -14,6 +14,8 @@ public class SongBrowser : MonoBehaviour
     public GameObject StrikerLine;
     public string SongDirectory;
     public bool Verbose = false;
+    public Button MidiMapManagerBtn;
+    public GameObject MidiMapManager;
     public GameObject ListEntryTemplate;
     List<SongInformation>SongLibrary = new List<SongInformation>();
     Transform trackList;
@@ -30,12 +32,17 @@ public class SongBrowser : MonoBehaviour
         if(SongLibrary.Count > 0){
             createTracklist();
         }
+        MidiMapManagerBtn.onClick.AddListener(ShowMidiMapManager);
     }
 
     // Update is called once per frame
     void Update()
     {
         trackList.transform.position = new Vector3(trackList.transform.position.x, (scrollBar.value * (SongLibrary.Count * 25)), trackList.transform.position.z);
+    }
+
+    void ShowMidiMapManager(){
+        MidiMapManager.SetActive(true);
     }
 
     void locateSongs(){

@@ -34,6 +34,7 @@ public class ReceiverV2 : MonoBehaviour
     Queue<GameObject>strikers = new Queue<GameObject>(); //queue for resetting striker positions
     Dictionary<GameObject, float> strikerDelays = new Dictionary<GameObject, float>(); //dict containing strikers to test for bounds/actively playing note and their cooldown
     Queue<string> noteNumbers = new Queue<string>(); //queue containing played midi notes to be converted to strikerss
+    Dictionary<int, string> kitMap = new Dictionary<int, string>();  //kit profile with mapping for midi note -> lane
 
     InputDevice inputDevice = null;
     void Start()

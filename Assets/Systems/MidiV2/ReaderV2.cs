@@ -15,10 +15,13 @@ public class ReaderV2 : MonoBehaviour
     public float Scale = 1.0f;
     public int Nominator = 8;
     public float AfterHit = 0.0f;
+    public int GhostNoteMaximum = 70;   //snare notes <= this value will be generated as ghost notes
     
     public GameObject DefaultNote, Kick, Snare, Tom1, Tom2, Tom3, HihatOpen, HihatClosed, HihatPedal, Crash1, Crash2, Ride, RideBell, China;
     public GameObject BarLine;
     public GameObject Striker;
+
+    public bool Verbose = false;
     
     MidiFile midiFile;
     TimeSignature timeSig;
@@ -40,7 +43,7 @@ public class ReaderV2 : MonoBehaviour
         long offset = 0;
         long finalNote = 0;
         midiFile = MidiFile.Read(FilePath, null);
-        Debug.Log("loaded: " + FilePath);
+        if(Verbose){Debug.Log("loaded: " + FilePath);}
         //rip chunks from file
         if(midiFile.Chunks != null)
         {
@@ -51,35 +54,30 @@ public class ReaderV2 : MonoBehaviour
             BPM = tempoMap.Tempo.AtTime(offset).BeatsPerMinute;
             QuarterNote = tempoMap.Tempo.AtTime(offset).MicrosecondsPerQuarterNote;
             QuarterNote /= 100000;
-            Debug.Log(timeSig.Numerator + "/" + timeSig.Denominator + "  tempo: " + tempoMap.Tempo.AtTime(offset) + " == " + BPM + " BPM");
-            Debug.Log("Adjusted 1/4 Note: " + QuarterNote);
+            if(Verbose){Debug.Log(timeSig.Numerator + "/" + timeSig.Denominator + "  tempo: " + tempoMap.Tempo.AtTime(offset) + " == " + BPM + " BPM");}
+            if(Verbose){Debug.Log("Adjusted 1/4 Note: " + QuarterNote);}
            
             //initialise mp3
             mp3 = GetComponent<AudioSource>();
             mp3.time = mp3Offset;
-            Debug.Log("mp3 Loaded with offset: " + mp3.time);
-
-
-            //split track chunks
-            foreach (TrackChunk t in midiFile.Chunks)
+            if(Verbose){Debug.Log("mp3 Loaded with offset: " + mp3.time);}
+            
+            foreach (TrackChunk t in midiFile.Chunks) //split track chunks
             {
-                //get all notes from chunk
-                using (var notesManager = t.ManageNotes())
+                using (var notesManager = t.ManageNotes()) //get all notes from chunk
                 {
                     NotesCollection notes = notesManager.Notes;
-                    
                     foreach(Note n in notes)
-                    {
-                        //set the first note to appear in the middle of the screen
-                        if(offset == 0)
+                    {   //set the first note to appear in the middle of the screen
+                        if(offset == 0) 
                         {
                             offset = n.Time;
-                            Debug.Log("first note offset: " + offset);
+                            if(Verbose){Debug.Log("first note offset: " + offset);}
                         }
                         chartNotes.Add(CreateNote((n.Time - offset + noteOffset), n.NoteNumber));        
                         finalNote = (n.Time - offset + (long)noteOffset) * QuarterNote;                       
                     }
-                    Debug.Log("Total Notes: " + chartNotes.Count);
+                    if(Verbose){Debug.Log("Total Notes: " + chartNotes.Count);}
                 }
                 //scale notes
                 foreach(moveNote n in chartNotes)
@@ -109,7 +107,7 @@ public class ReaderV2 : MonoBehaviour
             loaded = true;
         }
         else{
-            Debug.Log("no chunks found");
+            if(Verbose){Debug.Log("no chunks found");}
         }  
     }
 
@@ -120,7 +118,7 @@ public class ReaderV2 : MonoBehaviour
         mp3.clip = null;
         transform.position = Vector3.zero;
         chartNotes = new List<moveNote>();
-        Debug.Log("Chart and Audio Deleted");
+        if(Verbose){Debug.Log("Chart and Audio Deleted");}
     }
 
     void Update()

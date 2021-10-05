@@ -8,11 +8,8 @@ using Melanchall.DryWetMidi.Interaction;
 
 public class ReceiverV2 : MonoBehaviour
 {
-    public float StrikerHold = 0.1f;    //how long the striker is "held", allowing it to clear notes
     //game objects for note strikers. Toms are colour coded (legacy), cymbals are named.
     public Collider StrikerZone; //zone in which notes are playable
-
-    //particle systems that play when notes are cleared
     public ParticleSystem RedParticle, YellowParticle, BlueParticle, GreenParticle, OrangeParticle, KickParticle, HHPParticle, GreyParticle; //particle systems that play when notes are cleared
     public bool Verbose = false;
     Dictionary<string, ParticleSystem> noteParticles = new Dictionary<string, ParticleSystem>(); //dictionary linking notes to their relevant particle systems

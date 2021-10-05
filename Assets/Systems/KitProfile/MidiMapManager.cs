@@ -5,15 +5,13 @@ using System.Linq;
 
 public class MidiMapManager : MonoBehaviour //class for saving and and loading midi to lane mapping. Outputs to txt file.
 {
-    public string MapDirectory;
-    public InputField MapName;
-    public InputField InputTemplate;
-    public InputField HHP, Kick, Snare, Hihat, LCrash, Tom1, Tom2, RCrash, Ride, RBell, Tom3, China;
-    public Button SaveButton, LoadButton, NewButton, CloseButton;
+    public string MapDirectory; //directory to folder, should end in '\'
+    public InputField MapName;  //name of text file, without '.txt
+    public InputField InputTemplate;    //template input field for instantiation
+    public InputField HHP, Kick, Snare, Hihat, LCrash, Tom1, Tom2, RCrash, Ride, RBell, Tom3, China; //note input fields
+    public Button SaveButton, LoadButton, NewButton, CloseButton; //HUD buttons
     public bool Verbose = false;
-
-
-    public Dictionary<int, string> KitMap {get;set;} = new Dictionary<int, string>();
+    public Dictionary<int, string> KitMap {get;set;} = new Dictionary<int, string>();   //midi note inputs matched to drum note outputs
     
     void Start(){
         SaveButton.onClick.AddListener(saveMap);

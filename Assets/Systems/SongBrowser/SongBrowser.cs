@@ -22,6 +22,7 @@ public class SongBrowser : MonoBehaviour
     Scrollbar scrollBar;
     ReaderV2 midiReader;
     AudioSource audioPlayer;
+    
     void Start()
     {
         midiReader = Chart.GetComponent<ReaderV2>();

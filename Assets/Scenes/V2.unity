@@ -857,7 +857,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 698d7763b4c6d9948bb1f2cbc05a4ffe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StrikerHold: 0.1
   StrikerZone: {fileID: 1641701060}
   RedParticle: {fileID: 192623369674815107, guid: 166155835f7ef5a48a02f556d9015b17,
     type: 3}
@@ -5038,6 +5037,7 @@ MonoBehaviour:
   Scale: 30
   Nominator: 8
   AfterHit: 5.18
+  GhostNoteMaximum: 70
   DefaultNote: {fileID: 1031729861384523347, guid: 2da52a5e27d5d84439c6f3d3911a5db0,
     type: 3}
   Kick: {fileID: 9057680854371695664, guid: 2de21bd358831b14aa1665e4f46e4cd7, type: 3}
@@ -5059,6 +5059,7 @@ MonoBehaviour:
   China: {fileID: 8348678984786969486, guid: 483e9c1639ae23d42887b5c3eafc6628, type: 3}
   BarLine: {fileID: 9057680854371695664, guid: c7b0ce1e32586ac478db418b1f2d5f36, type: 3}
   Striker: {fileID: 1641701059}
+  Verbose: 0
   mp3Offset: 0
   noteOffset: 18150
 --- !u!1 &458652547
@@ -6044,6 +6045,8 @@ MonoBehaviour:
   StrikerLine: {fileID: 1641701059}
   SongDirectory: C:\Users\gener\Documents\Unity Projects\MidiTrainer\Assets\Songs
   Verbose: 1
+  MidiMapManagerBtn: {fileID: 995908137}
+  MidiMapManager: {fileID: 1971181460}
   ListEntryTemplate: {fileID: 4373307112369164648, guid: ab1afa4db04a4744dac65cbe70de0d67,
     type: 3}
 --- !u!114 &530529406
@@ -11044,7 +11047,7 @@ GameObject:
   - component: {fileID: 995908138}
   - component: {fileID: 995908137}
   m_Layer: 0
-  m_Name: ProfileBtn
+  m_Name: MapBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
